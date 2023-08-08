@@ -1,0 +1,10 @@
+jaffle_shop:
+   target: databricks_job
+   outputs:
+     databricks_job:
+      type: databricks
+      method: http
+      schema: "jaffle_shop_prod"
+      host: "adb-2022525491369193.13.azuredatabricks.net"
+      http_path: "/sql/1.0/warehouses/d7d6db10c251f01d"
+      token: "{{ env_var('DBT_ACCESS_TOKEN') }}"
