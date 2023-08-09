@@ -11,6 +11,6 @@
 {%- endmacro %}
 
 {% macro bigquery__parse_json(field) -%}
-    safe.parse_json("""{{ field }}""", wide_number_mode=>'round')
+    parse_json({{ field }})
 {%- endmacro %}
 

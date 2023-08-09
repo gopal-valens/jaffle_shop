@@ -1,4 +1,8 @@
-{% macro upload_sources(sources) -%}
+{% macro upload_sources(graph) -%}
+    {% set sources = [] %}
+    {% for node in graph.sources.values() %}
+        {% do sources.append(node) %}
+    {% endfor %}
     {{ return(adapter.dispatch('get_sources_dml_sql', 'dbt_artifacts')(sources)) }}
 {%- endmacro %}
 
@@ -17,8 +21,7 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(8) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(9) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(10) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(11)) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(12)) }}
+            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(11)) }}
         from values
         {% for source in sources -%}
             (
@@ -32,8 +35,7 @@
                 '{{ source.name }}', {# name #}
                 '{{ source.identifier }}', {# identifier #}
                 '{{ source.loaded_at_field | replace("'","\\'") }}', {# loaded_at_field #}
-                '{{ tojson(source.freshness) | replace("'","\\'") }}', {# freshness #}
-                '{{ tojson(source) | replace("\\", "\\\\") | replace("'", "\\'") | replace('"', '\\"') }}' {# all_results #}
+                '{{ tojson(source.freshness) | replace("'","\\'") }}' {# freshness #}
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}
@@ -59,8 +61,7 @@
                     '{{ source.name }}', {# name #}
                     '{{ source.identifier }}', {# identifier #}
                     '{{ source.loaded_at_field | replace("'","\\'") }}', {# loaded_at_field #}
-                    {{ adapter.dispatch('parse_json', 'dbt_artifacts')(tojson(source.freshness) | replace("'","\\'")) }},  {# freshness #}
-                    {{ adapter.dispatch('parse_json', 'dbt_artifacts')(tojson(source) | replace("\\", "\\\\") | replace("'", "\\'") | replace('"', '\\"')) }} {# all_results #}
+                    parse_json('{{ tojson(source.freshness) | replace("'","\\'") }}')  {# freshness #}
                 )
                 {%- if not loop.last %},{%- endif %}
             {%- endfor %}

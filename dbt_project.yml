@@ -24,6 +24,10 @@ models:
       materialized: table
       staging:
         materialized: view
+  dbt_artifacts:
+      enabled: false
+      source:
+        enabled: true
 
 on-run-end:
   - "{% if target.name == 'dev' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}"

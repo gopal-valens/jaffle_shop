@@ -22,9 +22,7 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(9) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(10) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(11) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(12)) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(13)) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(14)) }}
+            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(12)) }}
         from values
         {% for exposure in exposures -%}
             (
@@ -39,9 +37,7 @@
                 '{{ exposure.description | replace("'","\\'") }}', {# description #}
                 '{{ exposure.url }}', {# url #}
                 '{{ exposure.package_name }}', {# package_name #}
-                '{{ tojson(exposure.depends_on.nodes) }}', {# depends_on_nodes #}
-                '{{ tojson(exposure.tags) }}', {# tags #}
-                '{{ tojson(exposure) | replace("\\", "\\\\") | replace("'", "\\'") | replace('"', '\\"') }}' {# all_results #}
+                '{{ tojson(exposure.depends_on.nodes) }}' {# depends_on_nodes #}
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}
@@ -62,15 +58,13 @@
                     '{{ run_started_at }}', {# run_started_at #}
                     '{{ exposure.name | replace("'","\\'") }}', {# name #}
                     '{{ exposure.type }}', {# type #}
-                    {{ adapter.dispatch('parse_json', 'dbt_artifacts')(tojson(exposure.owner) | replace("'","\\'")) }}, {# owner #}
+                    parse_json('{{ tojson(exposure.owner) | replace("'","\\'") }}'), {# owner #}
                     '{{ exposure.maturity }}', {# maturity #}
                     '{{ exposure.original_file_path | replace('\\', '\\\\') }}', {# path #}
                     """{{ exposure.description | replace("'","\\'") }}""", {# description #}
                     '{{ exposure.url }}', {# url #}
                     '{{ exposure.package_name }}', {# package_name #}
-                    {{ tojson(exposure.depends_on.nodes) }}, {# depends_on_nodes #}
-                    {{ tojson(exposure.tags) }}, {# tags #}
-                    {{ adapter.dispatch('parse_json', 'dbt_artifacts')(tojson(exposure) | replace("\\", "\\\\") | replace("'", "\\'") | replace('"', '\\"')) }} {# all_results #}
+                    {{ tojson(exposure.depends_on.nodes) }} {# depends_on_nodes #}
                 )
                 {%- if not loop.last %},{%- endif %}
             {%- endfor %}

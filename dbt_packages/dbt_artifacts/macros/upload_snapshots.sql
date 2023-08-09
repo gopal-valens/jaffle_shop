@@ -24,8 +24,7 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(10) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(11) }},
             {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(12)) }},
-            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(13) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(14)) }}
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(13) }}
         from values
         {% for snapshot in snapshots -%}
             (
@@ -40,9 +39,8 @@
                 '{{ snapshot.original_file_path | replace('\\', '\\\\') }}', {# path #}
                 '{{ snapshot.checksum.checksum }}', {# checksum #}
                 '{{ snapshot.config.strategy }}', {# strategy #}
-                '{{ tojson(snapshot.config.meta) | replace("\\", "\\\\") | replace("'","\\'") | replace('"', '\\"') }}', {# meta #}
-                '{{ snapshot.alias }}', {# alias #}
-                '{{ tojson(snapshot) | replace("\\", "\\\\") | replace("'","\\'") | replace('"', '\\"') }}' {# all_results #}
+                '{{ tojson(snapshot.config.meta) }}', {# meta #}
+                '{{ snapshot.alias }}' {# alias #}
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}
@@ -69,9 +67,8 @@
                     '{{ snapshot.original_file_path | replace('\\', '\\\\') }}', {# path #}
                     '{{ snapshot.checksum.checksum }}', {# checksum #}
                     '{{ snapshot.config.strategy }}', {# strategy #}
-                    {{ adapter.dispatch('parse_json', 'dbt_artifacts')(tojson(snapshot.config.meta)) }}, {# meta #}
-                    '{{ snapshot.alias }}', {# alias #}
-                    {{ adapter.dispatch('parse_json', 'dbt_artifacts')(tojson(snapshot) | replace("\\", "\\\\") | replace("'","\\'") | replace('"', '\\"')) }} {# all_results #}
+                    parse_json('{{ tojson(snapshot.config.meta) }}'), {# meta #}
+                    '{{ snapshot.alias }}' {# alias #}
                 )
                 {%- if not loop.last %},{%- endif %}
             {%- endfor %}

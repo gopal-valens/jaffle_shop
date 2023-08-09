@@ -26,9 +26,7 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(12) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(13) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(14) }},
-            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(15) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(16)) }}
-
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(15) }}
         from values
         {% for model in models -%}
             (
@@ -72,8 +70,8 @@
                 '{{ model.node.schema }}', {# schema #}
                 '{{ model.node.name }}', {# name #}
                 '{{ model.node.alias }}', {# alias #}
-                '{{ model.message | replace("\\", "\\\\") | replace("'", "\\'") | replace('"', '\\"') }}', {# message #}
-                '{{ tojson(model.adapter_response) | replace("\\", "\\\\") | replace("'", "\\'") | replace('"', '\\"') }}' {# adapter_response #}
+                '{{ model.message }}' {# message #}
+
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}
@@ -130,8 +128,7 @@
             '{{ model.node.schema }}', {# schema #}
             '{{ model.node.name }}', {# name #}
             '{{ model.node.alias }}', {# alias #}
-            '{{ model.message | replace("\\", "\\\\") | replace("'", "\\'") | replace('"', '\\"') | replace("\n", "\\n") }}', {# message #}
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(tojson(model.adapter_response) | replace("\\", "\\\\") | replace("'", "\\'") | replace('"', '\\"')) }} {# adapter_response #}
+            '{{ model.message }}' {# message #}
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}
@@ -160,8 +157,7 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(12) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(13) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(14) }},
-            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(15) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(16)) }}
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(15) }}
         from values
         {% for model in models -%}
             (
@@ -205,8 +201,7 @@
                 '{{ model.node.schema }}', {# schema #}
                 '{{ model.node.name }}', {# name #}
                 '{{ model.node.alias }}', {# alias #}
-                '{{ model.message | replace("\\", "\\\\") | replace("'", "\\'") | replace('"', '\\"') }}', {# message #}
-                '{{ tojson(model.adapter_response) | replace("\\", "\\\\") | replace("'", "\\'") | replace('"', '\\"') }}' {# adapter_response #}
+                '{{ model.message }}' {# message #}
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}

@@ -1,8 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='id',
-        meta={"meta_field": "description with an ' apostrophe"},
+        unique_key='id'
     )
 }}
 

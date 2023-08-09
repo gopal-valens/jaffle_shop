@@ -1,4 +1,8 @@
-{% macro upload_tests(tests) -%}
+{% macro upload_tests(graph) -%}
+    {% set tests = [] %}
+    {% for node in graph.nodes.values() | selectattr("resource_type", "equalto", "test") %}
+        {% do tests.append(node) %}
+    {% endfor %}
     {{ return(adapter.dispatch('get_tests_dml_sql', 'dbt_artifacts')(tests)) }}
 {%- endmacro %}
 
@@ -14,8 +18,7 @@
             {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(5)) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(6) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(7) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(8)) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(9)) }}
+            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(8)) }}
         from values
         {% for test in tests -%}
             (
@@ -26,8 +29,7 @@
                 '{{ tojson(test.depends_on.nodes) }}', {# depends_on_nodes #}
                 '{{ test.package_name }}', {# package_name #}
                 '{{ test.original_file_path | replace('\\', '\\\\') }}', {# test_path #}
-                '{{ tojson(test.tags) }}', {# tags #}
-                '{{ tojson(test) | replace("\\", "\\\\") | replace("'","\\'") | replace('"', '\\"') }}' {# all_fields #}
+                '{{ tojson(test.tags) }}' {# tags #}
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}
@@ -50,8 +52,7 @@
                     {{ tojson(test.depends_on.nodes) }}, {# depends_on_nodes #}
                     '{{ test.package_name }}', {# package_name #}
                     '{{ test.original_file_path | replace('\\', '\\\\') }}', {# test_path #}
-                    {{ tojson(test.tags) }}, {# tags #}
-                    {{ adapter.dispatch('parse_json', 'dbt_artifacts')(tojson(test) | replace("\\", "\\\\") | replace("'","\\'") | replace('"', '\\"')) }} {# all_fields #}
+                    {{ tojson(test.tags) }} {# tags #}
                 )
                 {%- if not loop.last %},{%- endif %}
             {%- endfor %}

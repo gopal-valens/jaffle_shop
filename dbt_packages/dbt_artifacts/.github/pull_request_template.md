@@ -13,7 +13,6 @@
 - [ ] New features (breaking change)
 - [ ] Other (non-breaking change)
 - [ ] Other (breaking change)
-- [ ] Release preparation
 
 ## What does this solve?
 
