@@ -26,4 +26,4 @@ models:
         materialized: view
 
 on-run-end:
-  - "{% if target.name == 'prod' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}"
+  - "{% if target.name == 'dev' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}"
