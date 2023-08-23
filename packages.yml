@@ -1,3 +1,7 @@
 packages:
-  - package: brooklyn-data/dbt_artifacts
-    version: 2.3.0
+#  - package: brooklyn-data/dbt_artifacts
+#    version: 2.3.0
+#   - package: dbt-labs/logging
+#     version: 0.8.0
+  - package: elementary-data/elementary
+    version: 0.9.3

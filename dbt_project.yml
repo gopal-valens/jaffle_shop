@@ -24,6 +24,22 @@ models:
       materialized: table
       staging:
         materialized: view
+#  dbt_artifacts:
+#    +database: your_destination_database # optional, default is your target database
+#    +schema: audit # optional, default is your target schema
+#    staging:
+#      +database: your_destination_database # optional, default is your target database
+#      +schema: dbt_gopal__jaffle_shop_audit # optional, default is your target schema
+#    sources:
+#      +database: your_sources_database # optional, default is your target database
+#      +schema: dbt_gopal__jaffle_shop_audit # optional, default is your target schema
+  ## see docs: https://docs.elementary-data.com/
+  elementary:
+    ## elementary models will be created in the schema '<your_schema>_elementary'
+    +schema: "elementary"
+    ## To disable elementary for dev, uncomment this:
+    # enabled: "{{ target.name in ['prod','analytics'] }}"
+  
 
-on-run-end:
-  - "{% if target.name == 'dev' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}"
+#on-run-end:
+#  - "{% if target.name == 'dev' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}"
