@@ -27,7 +27,7 @@ with DAG(
     e1 = EmptyOperator(task_id="pre_dbt")
 
     dbt_tg = DbtDag(
-        project_config=ProjectConfig(dbt_project_path="/opt/airflow/git/jaffle_shop.git/dags/dbt/jaffle_shop"),
+        project_config=ProjectConfig(dbt_project_path="/opt/airflow/git/jaffle_shop.git/dags/dbt"),
         profile_config=profile_config,
     )
 
