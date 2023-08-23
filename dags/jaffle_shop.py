@@ -3,20 +3,11 @@ from pendulum import datetime
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from cosmos import DbtDag, DbtTaskGroup, ProfileConfig, ProjectConfig
-from cosmos.profiles import DatabricksTokenProfileMapping
 
 profile_config = ProfileConfig(
     profile_name="jaffle_shop",
     target_name="dev",
     profiles_yml_filepath="/opt/airflow/git/jaffle_shop.git/dags/dbt/jaffle_shop/profiles.yml",
-)
-
-databricks_profile = DatabricksTokenProfileMapping(
-    conn_id='my_databricks_connection',
-    profile_args={"host": "adb-2002800394447601.1.azuredatabricks.net",
-                  "schema": "dbt_gopal__jaffle_shop",
-                  "token": "dapib9177beac988227e0440856809ebb2e5",
-                  "http_path": "/sql/1.0/warehouses/ef0a6fc07d996fb5"},
 )
 
 with DAG(
@@ -26,8 +17,8 @@ with DAG(
 ):
     e1 = EmptyOperator(task_id="pre_dbt")
 
-    dbt_tg = DbtDag(
-        project_config=ProjectConfig(dbt_project_path="/opt/airflow/git/jaffle_shop.git/dags/dbt"),
+    dbt_tg = DbtTaskGroup(
+        project_config=ProjectConfig(dbt_project_path="/opt/airflow/git/jaffle_shop.git/dags/dbt/jaffle_shop"),
         profile_config=profile_config,
     )
 
