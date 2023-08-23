@@ -8,7 +8,7 @@ from cosmos.profiles import DatabricksTokenProfileMapping
 profile_config = ProfileConfig(
     profile_name="jaffle_shop",
     target_name="dev",
-    profiles_yml_filepath="profiles.yml",
+    profiles_yml_filepath="/opt/airflow/git/jaffle_shop.git/dags/dbt/profiles.yml",
 )
 
 databricks_profile = DatabricksTokenProfileMapping(
