@@ -18,7 +18,7 @@ with DAG(
     e1 = EmptyOperator(task_id="pre_dbt")
 
     dbt_tg = DbtTaskGroup(
-        project_config=ProjectConfig(dbt_project_path="/opt/airflow/git/jaffle_shop.git/dags/dbt/jaffle_shop", manifest_path="/opt/airflow/git/jaffle_shop.git/dags/dbt/jaffle_shop/dags/dbt/jaffle_shop/target/manifest.json"),
+        project_config=ProjectConfig(dbt_project_path="/opt/airflow/git/jaffle_shop.git/dags/dbt/jaffle_shop", manifest_path="/opt/airflow/git/jaffle_shop.git/dags/dbt/jaffle_shop/target/manifest.json"),
         profile_config=profile_config,
     )
 
