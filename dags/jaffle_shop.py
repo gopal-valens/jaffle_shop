@@ -9,7 +9,7 @@ PROJECT_ROOT_PATH="/opt/airflow/git/jaffle_shop.git/dags/dbt/jaffle_shop"
 profile_config = ProfileConfig(
     profile_name="jaffle_shop",
     target_name="dev",
-    profiles_yml_filepath=f"${PROJECT_ROOT_PATH}/profiles.yml",
+    profiles_yml_filepath=f"{PROJECT_ROOT_PATH}/profiles.yml",
 )
 
 with DAG(
@@ -20,8 +20,8 @@ with DAG(
     e1 = EmptyOperator(task_id="pre_dbt")
 
     dbt_tg = DbtTaskGroup(
-        project_config=ProjectConfig(dbt_project_path=f"${PROJECT_ROOT_PATH}",
-                                     manifest_path=f"${PROJECT_ROOT_PATH}/target/manifest.json",),
+        project_config=ProjectConfig(dbt_project_path=PROJECT_ROOT_PATH,
+                                     manifest_path=f"{PROJECT_ROOT_PATH}/target/manifest.json",),
         profile_config=profile_config,
         render_config=RenderConfig(
             load_method=LoadMode.DBT_MANIFEST,
