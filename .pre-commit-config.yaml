@@ -1,0 +1,17 @@
+repos:
+- repo: https://github.com/dbt-checkpoint/dbt-checkpoint
+  rev: v1.1.0
+  hooks:
+  - id: check-script-semicolon
+    args: ["--cmd-flags", "++project-dir", "dags/dbt/jaffle_shop"]
+  - id: check-script-has-no-table-name
+  - id: dbt-test
+#  - id: dbt-docs-generate
+#    args: ["--cmd-flags", "++project-dir", "dags/dbt/jaffle_shop", "++profiles-dir", "dags/dbt/jaffle_shop"]
+  - id: check-model-has-all-columns
+    name: Check columns - staging
+    files: ^models/staging
+  - id: check-model-columns-have-desc
+    files: ^models/staging
+  - id: check-model-has-tests
+    args: ["--test-cnt", "2", "--manifest", "dags/dbt/jaffle_shop/target/manifest.json"]
