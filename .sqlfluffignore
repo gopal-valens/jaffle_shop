@@ -1,0 +1,7 @@
+# dbt output files
+dags/dbt/jaffle_shop/target/
+dags/dbt/jaffle_shop/dbt_packages/
+
+# other
+dags/dbt/jaffle_shop/analysis/
+dags/dbt/jaffle_shop/macros/
