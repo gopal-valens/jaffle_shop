@@ -1,13 +1,6 @@
-# all commands by default will run on every commit
-default_install_hook_types: [pre-commit]
-default_stages: [pre-commit]
-
-# some configs are only available after v2.18
-minimum_pre_commit_version: '2.18'
-
 repos:
     - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
-      rev: v1.1.1
+      rev: v1.1.0
       hooks:
       - id: dbt-compile
         args: ["--cmd-flags", "++project-dir", "dags/dbt/jaffle_shop", "++profiles-dir", "dags/dbt/jaffle_shop"]
