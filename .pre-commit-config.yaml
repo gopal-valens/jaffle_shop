@@ -3,6 +3,6 @@ repos:
       rev: v1.1.0
       hooks:
       - id: dbt-compile
-        args: ["--cmd-flags", "++project-dir", "dags/dbt/jaffle_shop", "++profiles-dir", "dags/dbt/jaffle_shop"]
+        args: ["--cmd-flags", "++project-dir", "dags/dbt/jaffle_shop", "++profiles-dir", "dags/dbt/jaffle_shop", "--"]
       - id: check-model-has-tests
         args: ["--test-cnt", "2", "--manifest", "dags/dbt/jaffle_shop/target/manifest.json"]
