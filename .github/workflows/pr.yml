@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+      # this Action should follow steps to set up Python build environment
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v4
       # - id: file_changes
       #   uses: trilom/file-changes-action@v1.2.4
       #   with:
