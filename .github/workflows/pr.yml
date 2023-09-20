@@ -26,6 +26,6 @@ jobs:
       - uses: dbt-checkpoint/dbt-checkpoint@v1.1.0
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-      #  with:
-      #    args: run --all-files
+        with:
+          args: pre-commit run -a
       #    args: run --files ${{ steps.file_changes.outputs.files}}
