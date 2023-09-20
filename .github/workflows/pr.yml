@@ -15,9 +15,12 @@ jobs:
       #   uses: trilom/file-changes-action@v1.2.4
       #   with:
       #     output: ' '
-      - uses: dbt-checkpoint/dbt-checkpoint@v1.1.0
+      - uses: pre-commit/action@v3.0.0
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-        with:
-          args: run --all-files
+      # - uses: dbt-checkpoint/dbt-checkpoint@v1.1.0
+      #  env:
+      #    DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+      #  with:
+      #    args: run --all-files
       #    args: run --files ${{ steps.file_changes.outputs.files}}
