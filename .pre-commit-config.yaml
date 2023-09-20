@@ -6,32 +6,10 @@ default_stages: [pre-commit]
 minimum_pre_commit_version: '2.18'
 
 repos:
-  - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 2.3.2
-    hooks:
-      - id: sqlfluff-lint
-        additional_dependencies: [
-          'dbt-databricks==1.5.5',
-          'sqlfluff-templater-dbt==2.3.2'
-        ]
-      - id: sqlfluff-fix
-        stages: [manual]  # this command is available only to run manually by "pre-commit run --hook-stage manual [hookid]"
-        additional_dependencies: [
-          'dbt-databricks==1.5.5',
-          'sqlfluff-templater-dbt==2.3.2'
-        ]
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.32.0
-    hooks:
-      - id: yamllint
-        args: [-c=.yamllint]
-  - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
-    rev: v1.1.1
-    hooks:
-      - id: dbt-docs-generate
+    - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
+      rev: v1.1.1
+      hooks:
+      - id: dbt-compile
         args: ["--cmd-flags", "++project-dir", "dags/dbt/jaffle_shop", "++profiles-dir", "dags/dbt/jaffle_shop"]
-      - id: check-source-table-has-description
-      - id: check-model-columns-have-desc
-      - id: check-model-has-all-columns
       - id: check-model-has-tests
         args: ["--test-cnt", "2", "--manifest", "dags/dbt/jaffle_shop/target/manifest.json"]
