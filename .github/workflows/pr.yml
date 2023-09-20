@@ -1,4 +1,4 @@
-name: dbt-project-checks
+name: pre-commit
 
 on:
   pull_request:
