@@ -32,5 +32,4 @@ jobs:
       - name: run pre-commit-dbt added files
       #  if: steps.get_file_changes.outputs.files_added != '' && always()
         shell: bash
-        run: |
-          pre-commit run --all-files |
+        run: pre-commit run --all-files
