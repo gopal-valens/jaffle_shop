@@ -23,9 +23,14 @@ jobs:
       # - uses: pre-commit/action@v3.0.0
       #  env:
       #    DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-      - uses: dbt-checkpoint/dbt-checkpoint@v1.1.0
-        env:
-          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-        with:
-          args: run -a
+      # - uses: dbt-checkpoint/dbt-checkpoint@v1.1.0
+      #  env:
+      #    DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+      #  with:
+      #    args: run -a
       #    args: run --files ${{ steps.file_changes.outputs.files}}
+      - name: run pre-commit-dbt added files
+      #  if: steps.get_file_changes.outputs.files_added != '' && always()
+        shell: bash
+        run: |
+          pre-commit run --all-files |
