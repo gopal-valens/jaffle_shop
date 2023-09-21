@@ -4,28 +4,60 @@ models:
   - name: stg_customers
     columns:
       - name: customer_id
+        description: unique customer id
         tests:
           - unique
           - not_null
+      - name: first_name
+        description: customer first name
+      - name: last_name
+        description: customer last name
 
   - name: stg_orders
     columns:
       - name: order_id
+        description: this is unique order id
         tests:
           - unique
           - not_null
       - name: status
+        description: order status
         tests:
           - accepted_values:
               values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
-
+      - name: order_date
+        description: order date
+      - name: customer_id
+        description: order customer id
+  - name: stg_orders_2
+    columns:
+      - name: order_id
+        description: this is unique order id
+        tests:
+          - unique
+          - not_null
+      - name: status
+        description: order status
+        tests:
+          - accepted_values:
+              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+      - name: order_date
+        description: order date
+      - name: customer_id
+        description: order customer id
   - name: stg_payments
     columns:
       - name: payment_id
+        description: payment unique id
         tests:
           - unique
           - not_null
       - name: payment_method
+        description: payment method name
         tests:
           - accepted_values:
               values: ['credit_card', 'coupon', 'bank_transfer', 'gift_card']
+      - name: amount
+        description: payment amount
+      - name: order_id
+        description: order id
