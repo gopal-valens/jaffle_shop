@@ -1,0 +1,23 @@
+name: develop-code-review
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  dbt-code-quality-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout github repository
+        uses: actions/checkout@v2
+      - name: setup python environment
+        uses: actions/setup-python@v2
+      - name: install python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "ci-requirements.txt"
+      - name: run pre-commit dbt checks
+        env:
+          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+        run: pre-commit run --all-files
