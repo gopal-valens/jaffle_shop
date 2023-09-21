@@ -1,4 +1,4 @@
-with source as (
+with raw_order_source as (
 
     {#-
     Normally we would select from the table here, but we are using seeds to load
@@ -16,7 +16,7 @@ renamed as (
         order_date,
         status
 
-    from source
+    from raw_order_source
 
 )
 
