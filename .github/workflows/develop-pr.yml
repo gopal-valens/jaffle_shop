@@ -21,3 +21,30 @@ jobs:
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
         run: pre-commit run --all-files
+  dbt-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout github repository
+        uses: actions/checkout@v2
+      - name: setup python environment
+        uses: actions/setup-python@v2
+      - name: install python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "ci-requirements.txt"
+      - name: run dbt dependencies
+        env:
+          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+        run: run dbt deps
+      - name: compile dbt manifest in production branch
+        env:
+          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+        run: |
+            git checkout main
+            run dbt debug --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
+            run dbt compile --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
+            mv dags/dbt/jaffle_shop/target/manifest.json .
+      - name: checkout to current branch
+        run: git checkout $GITHUB_REF_NAME
+      - name: run dbt build
+        run: dbt build --models state:modified+ --defer --state . --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop -x
