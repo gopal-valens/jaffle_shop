@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: checkout github repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: setup python environment
         uses: actions/setup-python@v2
       - name: install python dependencies
@@ -38,6 +40,10 @@ jobs:
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
         run: dbt deps ${{ env.DBT_ARGS }}
+#      - uses: actions/checkout@v2
+#        with:
+#          ref: main
+#          path: production
       - name: compile dbt manifest in production branch
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
@@ -49,4 +55,4 @@ jobs:
       - name: checkout to current branch
         run: git checkout $GITHUB_REF_NAME
       - name: dbt build
-        run: dbt build --models state:modified+ --defer --state . ${{ env.DBT_ARGS }}
+        run: dbt build --models state:modified+ --defer --state ./production ${{ env.DBT_ARGS }}
