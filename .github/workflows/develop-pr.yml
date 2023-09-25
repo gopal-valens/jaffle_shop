@@ -52,7 +52,7 @@ jobs:
             dbt debug ${{ env.DBT_ARGS }}
             dbt compile ${{ env.DBT_ARGS }}
             mv dags/dbt/jaffle_shop/target/manifest.json .
-      - name: checkout to current branch
-        run: git checkout $GITHUB_REF_NAME
+      - name: checkout to current branch ${GITHUB_REF_NAME}
+        run: git checkout ${GITHUB_REF_NAME}
       - name: dbt build
         run: dbt build --models state:modified+ --defer --state ./production ${{ env.DBT_ARGS }}
