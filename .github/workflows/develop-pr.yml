@@ -37,7 +37,7 @@ jobs:
       - name: run dbt dependencies
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-        run: dbt deps
+        run: dbt deps ${{ env.DBT_ARGS }}
       - name: compile dbt manifest in production branch
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
