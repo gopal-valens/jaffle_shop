@@ -5,8 +5,7 @@ on:
     branches:
       - develop
 env:
-  continue: true
-  time: 3
+  DBT_ARGS: --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
 jobs:
   dbt-code-quality-checks:
     runs-on: ubuntu-latest
@@ -38,16 +37,16 @@ jobs:
       - name: run dbt dependencies
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-        run: run dbt deps
+        run: dbt deps
       - name: compile dbt manifest in production branch
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
         run: |
             git checkout main
-            run dbt debug --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
-            run dbt compile --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
+            dbt debug ${{ env.DBT_ARGS }}
+            dbt compile ${{ env.DBT_ARGS }}
             mv dags/dbt/jaffle_shop/target/manifest.json .
       - name: checkout to current branch
         run: git checkout $GITHUB_REF_NAME
-      - name: run dbt build
-        run: dbt build --models state:modified+ --defer --state . --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop
+      - name: dbt build
+        run: dbt build --models state:modified+ --defer --state . ${{ env.DBT_ARGS }}
