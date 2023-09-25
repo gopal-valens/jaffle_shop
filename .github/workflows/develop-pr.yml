@@ -4,7 +4,9 @@ on:
   pull_request:
     branches:
       - develop
-
+env:
+  continue: true
+  time: 3
 jobs:
   dbt-code-quality-checks:
     runs-on: ubuntu-latest
@@ -22,6 +24,7 @@ jobs:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
         run: pre-commit run --all-files
   dbt-build:
+    needs: dbt-code-quality-checks
     runs-on: ubuntu-latest
     steps:
       - name: checkout github repository
@@ -47,4 +50,4 @@ jobs:
       - name: checkout to current branch
         run: git checkout $GITHUB_REF_NAME
       - name: run dbt build
-        run: dbt build --models state:modified+ --defer --state . --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop -x
+        run: dbt build --models state:modified+ --defer --state . --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop
