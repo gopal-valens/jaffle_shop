@@ -5,9 +5,16 @@ on:
     branches:
       - develop
 env:
-  DBT_ARGS: --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
-  CURRENT_BRANCH_NAME: ${{ github.head_ref }}
   PRODUCTION_BRANCH: main
+  DBT_PRODUCTION_ARGS: --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
+  TEST_BRANCH_NAME: ${{ github.head_ref }}
+  DBT_TEST_ARGS: --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
+  DBT_TEST_SCHEMA: develop_pr_${{ github.event.number }}_${{ github.run_id }}_test
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
 #  dbt-code-quality-checks:
 #    runs-on: ubuntu-latest
@@ -48,9 +55,9 @@ jobs:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
         working-directory: ./production_branch
         run: |
-            dbt deps ${{ env.DBT_ARGS }}
-            dbt debug ${{ env.DBT_ARGS }}
-            dbt compile ${{ env.DBT_ARGS }}
+            dbt deps ${{ env.DBT_PRODUCTION_ARGS }}
+            dbt debug ${{ env.DBT_PRODUCTION_ARGS }}
+            dbt compile ${{ env.DBT_PRODUCTION_ARGS }}
             cp dags/dbt/jaffle_shop/target/manifest.json ~/
 #      - name: run dbt dependencies
 #        env:
@@ -65,7 +72,8 @@ jobs:
       - name: dbt build
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+          DBT_TEST_SCHEMA: ${{ env.DBT_TEST_SCHEMA }}
         working-directory: ./current_branch
         run: |
-            dbt deps ${{ env.DBT_ARGS }}
-            dbt build --models state:modified+ --defer --state ~/ ${{ env.DBT_ARGS }}
+            dbt deps ${{ env.DBT_TEST_ARGS }}
+            dbt build --models state:modified+ --defer --state ~/ ${{ env.DBT_TEST_ARGS }} --target test
