@@ -28,3 +28,11 @@ jobs:
         env:
           CURRENT_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
         run: echo $CURRENT_BRANCH_NAME
+      - name: github.ref.head branch name from github context
+        env:
+          CURRENT_BRANCH_NAME: ${{ github.ref.head }}
+        run: echo $CURRENT_BRANCH_NAME
+      - name: head_ref branch name from github context
+        env:
+          CURRENT_BRANCH_NAME: ${{ github.head_ref }}
+        run: echo $CURRENT_BRANCH_NAME
