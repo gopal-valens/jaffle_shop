@@ -14,9 +14,6 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - run: git status
-      - run: git branch
-      - run: ls -a
       - name: Extract branch name
         id: extract_branch
         run: |
