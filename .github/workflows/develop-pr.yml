@@ -10,49 +10,24 @@ jobs:
   dbt-code-quality-checks:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout github repository
-        uses: actions/checkout@v2
-      - name: setup python environment
-        uses: actions/setup-python@v2
-      - name: install python dependencies
-        uses: py-actions/py-dependency-install@v4
-        with:
-          path: "ci-requirements.txt"
-      - name: run pre-commit dbt checks
+      - name: Dump GitHub context
         env:
-          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-        run: pre-commit run --all-files
-  dbt-build:
-    needs: dbt-code-quality-checks
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout github repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: setup python environment
-        uses: actions/setup-python@v2
-      - name: install python dependencies
-        uses: py-actions/py-dependency-install@v4
-        with:
-          path: "ci-requirements.txt"
-      - name: run dbt dependencies
-        env:
-          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-        run: dbt deps ${{ env.DBT_ARGS }}
-#      - uses: actions/checkout@v2
-#        with:
-#          ref: main
-#          path: production
-      - name: compile dbt manifest in production branch
-        env:
-          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - run: git status
+      - run: git branch
+      - run: ls -a
+      - name: Extract branch name
+        id: extract_branch
         run: |
-            git checkout main
-            dbt debug ${{ env.DBT_ARGS }}
-            dbt compile ${{ env.DBT_ARGS }}
-            mv dags/dbt/jaffle_shop/target/manifest.json .
-      - name: checkout to current branch ${{ github.ref_name }}
-        run: git checkout ${{ github.ref_name }}
-      - name: dbt build
-        run: dbt build --models state:modified+ --defer --state ./production ${{ env.DBT_ARGS }}
+          if [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+            echo "::set-output name=branch::$(echo ${GITHUB_REF##*/})"
+          elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+            echo "::set-output name=branch::$(echo $GITHUB_BASE_REF)"
+          else
+            echo "::set-output name=branch::INVALID_EVENT_BRANCH_UNKNOWN"
+          fi
+      - name: branch name print
+        env:
+          CURRENT_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+        run: echo $CURRENT_BRANCH_NAME
