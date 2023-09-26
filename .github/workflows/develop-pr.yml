@@ -57,4 +57,4 @@ jobs:
       - name: checkout to current branch ${{ github.head_ref }}
         run: git checkout ${{ env.CURRENT_BRANCH_NAME }}
       - name: dbt build
-        run: dbt build --models state:modified+ --defer --state ./production ${{ env.DBT_ARGS }}
+        run: dbt build --models state:modified+ --defer --state . ${{ env.DBT_ARGS }}
