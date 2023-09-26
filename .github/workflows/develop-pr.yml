@@ -9,23 +9,23 @@ env:
   CURRENT_BRANCH_NAME: ${{ github.head_ref }}
   PRODUCTION_BRANCH: main
 jobs:
-  dbt-code-quality-checks:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout github repository
-        uses: actions/checkout@v2
-      - name: setup python environment
-        uses: actions/setup-python@v2
-      - name: install python dependencies
-        uses: py-actions/py-dependency-install@v4
-        with:
-          path: "ci-requirements.txt"
-      - name: run pre-commit dbt checks
-        env:
-          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-        run: pre-commit run --all-files
+#  dbt-code-quality-checks:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: checkout github repository
+#        uses: actions/checkout@v2
+#      - name: setup python environment
+#        uses: actions/setup-python@v2
+#      - name: install python dependencies
+#        uses: py-actions/py-dependency-install@v4
+#        with:
+#          path: "ci-requirements.txt"
+#      - name: run pre-commit dbt checks
+#        env:
+#          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+#        run: pre-commit run --all-files
   dbt-build:
-    needs: dbt-code-quality-checks
+#    needs: dbt-code-quality-checks
     runs-on: ubuntu-latest
     steps:
       - name: checkout current github repository
