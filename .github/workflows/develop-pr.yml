@@ -51,7 +51,7 @@ jobs:
             dbt deps ${{ env.DBT_ARGS }}
             dbt debug ${{ env.DBT_ARGS }}
             dbt compile ${{ env.DBT_ARGS }}
-            mv dags/dbt/jaffle_shop/target/manifest.json .
+            cp dags/dbt/jaffle_shop/target/manifest.json ~/
 #      - name: run dbt dependencies
 #        env:
 #         DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
@@ -68,4 +68,4 @@ jobs:
         working-directory: ./current_branch
         run: |
             dbt deps ${{ env.DBT_ARGS }}
-            dbt build --models state:modified+ --defer --state ../production_branch/ ${{ env.DBT_ARGS }}
+            dbt build --models state:modified+ --defer --state ~/ ${{ env.DBT_ARGS }}
