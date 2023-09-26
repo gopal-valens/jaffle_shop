@@ -15,3 +15,10 @@ jaffle_shop:
       host: "adb-330131963380671.11.azuredatabricks.net"
       http_path: "/sql/1.0/warehouses/e7179047f65153d7"
       token: "{{ env_var('DBT_ACCESS_TOKEN') }}"
+    test:
+      type: databricks
+      method: http
+      schema: "{{ env_var('DBT_TEST_SCHEMA') }}"
+      host: "adb-330131963380671.11.azuredatabricks.net"
+      http_path: "/sql/1.0/warehouses/e7179047f65153d7"
+      token: "{{ env_var('DBT_ACCESS_TOKEN') }}"
