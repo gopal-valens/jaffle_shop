@@ -57,4 +57,6 @@ jobs:
       - name: checkout to current branch ${{ github.head_ref }}
         run: git checkout ${{ env.CURRENT_BRANCH_NAME }}
       - name: dbt build
+        env:
+          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
         run: dbt build --models state:modified+ --defer --state . ${{ env.DBT_ARGS }}
