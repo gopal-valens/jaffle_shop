@@ -76,4 +76,5 @@ jobs:
         working-directory: ./current_branch
         run: |
             dbt deps ${{ env.DBT_TEST_ARGS }}
+            dbt seed ${{ env.DBT_TEST_ARGS }}
             dbt build --models state:modified+ --defer --state ~/ ${{ env.DBT_TEST_ARGS }}
