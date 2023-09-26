@@ -5,13 +5,13 @@ jaffle_shop:
       type: databricks
       method: http
       schema: "jaffle_shop_prod"
-      host: "adb-4283607685962842.2.azuredatabricks.net"
-      http_path: "/sql/1.0/warehouses/d4bc0ffb1242fbcd"
+      host: "adb-330131963380671.11.azuredatabricks.net"
+      http_path: "/sql/1.0/warehouses/e7179047f65153d7"
       token: "{{ env_var('DBT_ACCESS_TOKEN') }}"
      dev:
       type: databricks
       method: http
       schema: "dbt_gopal__jaffle_shop"
-      host: "adb-4283607685962842.2.azuredatabricks.net"
-      http_path: "/sql/1.0/warehouses/d4bc0ffb1242fbcd"
+      host: "adb-330131963380671.11.azuredatabricks.net"
+      http_path: "/sql/1.0/warehouses/e7179047f65153d7"
       token: "{{ env_var('DBT_ACCESS_TOKEN') }}"
