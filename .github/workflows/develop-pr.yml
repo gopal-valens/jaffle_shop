@@ -7,6 +7,7 @@ on:
 env:
   DBT_ARGS: --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
   CURRENT_BRANCH_NAME: ${{ github.head_ref }}
+  PRODUCTION_BRANCH: main
 jobs:
   dbt-code-quality-checks:
     runs-on: ubuntu-latest
@@ -49,7 +50,7 @@ jobs:
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
         run: |
-            git checkout main
+            git checkout ${{ env.PRODUCTION_BRANCH }}
             dbt debug ${{ env.DBT_ARGS }}
             dbt compile ${{ env.DBT_ARGS }}
             mv dags/dbt/jaffle_shop/target/manifest.json .
