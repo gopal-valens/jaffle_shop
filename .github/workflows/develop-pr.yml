@@ -78,3 +78,4 @@ jobs:
             dbt deps ${{ env.DBT_TEST_ARGS }}
             dbt seed ${{ env.DBT_TEST_ARGS }}
             dbt build --models state:modified+ --defer --state ~/ ${{ env.DBT_TEST_ARGS }}
+            dbt run-operation pr_schema_cleanup --args "{'schema_to_clean': '${{ env.DBT_TEST_SCHEMA }}'}" ${{ env.DBT_TEST_ARGS }}
