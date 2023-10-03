@@ -5,20 +5,20 @@ jaffle_shop:
       type: databricks
       method: http
       schema: "jaffle_shop_prod"
-      host: "adb-330131963380671.11.azuredatabricks.net"
-      http_path: "/sql/1.0/warehouses/e7179047f65153d7"
+      host: "adb-7527382258771197.17.azuredatabricks.net"
+      http_path: "/sql/1.0/warehouses/4a0285572e55258d"
       token: "{{ env_var('DBT_ACCESS_TOKEN') }}"
     dev:
       type: databricks
       method: http
       schema: "dbt_gopal__jaffle_shop"
-      host: "adb-330131963380671.11.azuredatabricks.net"
-      http_path: "/sql/1.0/warehouses/e7179047f65153d7"
+      host: "adb-7527382258771197.17.azuredatabricks.net"
+      http_path: "/sql/1.0/warehouses/4a0285572e55258d"
       token: "{{ env_var('DBT_ACCESS_TOKEN') }}"
     test:
       type: databricks
       method: http
       schema: "{{ env_var('DBT_TEST_SCHEMA') }}"
-      host: "adb-330131963380671.11.azuredatabricks.net"
-      http_path: "/sql/1.0/warehouses/e7179047f65153d7"
+      host: "adb-7527382258771197.17.azuredatabricks.net"
+      http_path: "/sql/1.0/warehouses/4a0285572e55258d"
       token: "{{ env_var('DBT_ACCESS_TOKEN') }}"
