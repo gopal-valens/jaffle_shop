@@ -78,11 +78,11 @@ jobs:
           dbt deps ${{ env.DBT_TEST_ARGS }}
           dbt seed ${{ env.DBT_TEST_ARGS }}
           dbt build --models state:modified+ --defer --state ~/ ${{ env.DBT_TEST_ARGS }}
-      - name: clean temporary schema
-        if: always()
-        env:
-          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-          DBT_TEST_SCHEMA: ${{ env.DBT_TEST_SCHEMA }}
-        working-directory: ./current_branch
-        run: |
-          dbt run-operation pr_schema_cleanup --args "{'schema_to_clean': '${{ env.DBT_TEST_SCHEMA }}'}" ${{ env.DBT_TEST_ARGS }}
+#      - name: clean temporary schema
+#        if: always()
+#        env:
+#          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+#          DBT_TEST_SCHEMA: ${{ env.DBT_TEST_SCHEMA }}
+#        working-directory: ./current_branch
+#        run: |
+#          dbt run-operation pr_schema_cleanup --args "{'schema_to_clean': '${{ env.DBT_TEST_SCHEMA }}'}" ${{ env.DBT_TEST_ARGS }}
