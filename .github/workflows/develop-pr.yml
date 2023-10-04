@@ -16,23 +16,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-#  dbt-code-quality-checks:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: checkout github repository
-#        uses: actions/checkout@v2
-#      - name: setup python environment
-#        uses: actions/setup-python@v2
-#      - name: install python dependencies
-#        uses: py-actions/py-dependency-install@v4
-#        with:
-#          path: "ci-requirements.txt"
-#      - name: run pre-commit dbt checks
-#        env:
-#          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-#        run: pre-commit run --all-files
+  dbt-code-quality-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout github repository
+        uses: actions/checkout@v2
+      - name: setup python environment
+        uses: actions/setup-python@v2
+      - name: install python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "ci-requirements.txt"
+      - name: file changes
+        id: file_changes
+        uses: trilom/file-changes-action@v1.2.4
+        with:
+          output: ' '
+      - name: run pre-commit dbt checks
+        env:
+          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+        run: pre-commit run --files ${{ steps.file_changes.outputs.files}}
   dbt-build:
-#    needs: dbt-code-quality-checks
+    needs: dbt-code-quality-checks
     runs-on: ubuntu-latest
     steps:
       - name: checkout current github repository
@@ -59,16 +64,6 @@ jobs:
             dbt debug ${{ env.DBT_PRODUCTION_ARGS }}
             dbt compile ${{ env.DBT_PRODUCTION_ARGS }}
             cp dags/dbt/jaffle_shop/target/manifest.json ~/
-#      - name: run dbt dependencies
-#        env:
-#         DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
-#        run: dbt deps ${{ env.DBT_ARGS }}
-#      - uses: actions/checkout@v2
-#        with:
-#          ref: main
-#          path: production
-#      - name: checkout to current branch ${{ github.head_ref }}
-#        run: git checkout ${{ env.CURRENT_BRANCH_NAME }}
       - name: dbt build
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
