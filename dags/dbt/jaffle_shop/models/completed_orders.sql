@@ -1,6 +1,6 @@
 with final as (
 
-    select * from orders
+    select * from jaffle_shop_prod.orders
     where status = 'completed'
 
 )
