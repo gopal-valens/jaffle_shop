@@ -1,6 +1,6 @@
 with final as (
 
-    select * from {{ ref('orders') }}
+    select * from jaffle_shop_prod.orders
     where status = 'completed'
 
 )
