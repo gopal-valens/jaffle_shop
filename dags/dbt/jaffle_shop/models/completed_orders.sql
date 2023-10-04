@@ -1,6 +1,6 @@
 with final as (
 
-    select * from {{ ref('orders') }}
+    select * from orders
     where status = 'completed'
 
 )
