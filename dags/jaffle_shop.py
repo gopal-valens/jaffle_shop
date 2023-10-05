@@ -6,7 +6,7 @@ from cosmos import DbtDag, LoadMode, RenderConfig, DbtTaskGroup, ProfileConfig, 
 from cosmos.profiles import DatabricksTokenProfileMapping
 from cosmos.constants import TestBehavior
 
-PROJECT_ROOT_PATH="/opt/airflow/git/jaffle_shop.git/dags/dbt/jaffle_shop"
+PROJECT_ROOT_PATH="/opt/airflow/dags/dbt/jaffle_shop"
 
 profile_config = ProfileConfig(
     profile_name="jaffle_shop",
@@ -19,8 +19,9 @@ profile_config = ProfileConfig(
 
 with DAG(
         dag_id="jaffle_shop_dbt",
-        start_date=datetime(2023, 9, 12),
+        start_date=datetime(2023, 10, 5),
         schedule="@daily",
+        catchup=False 
 ):
     e1 = EmptyOperator(task_id="pre_dbt")
 

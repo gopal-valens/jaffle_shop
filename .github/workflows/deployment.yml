@@ -8,11 +8,26 @@ on:
     branches:
       - 'main'
 
+env:
+  DBT_PRODUCTION_ARGS: --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
+
 jobs:
   upload:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: setup python environment
+        uses: actions/setup-python@v2
+      - name: install python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "ci-requirements.txt"
+      - name: compile dbt manifest in production branch
+        env:
+          DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
+        run: |
+          dbt deps ${{ env.DBT_PRODUCTION_ARGS }}
+          dbt compile ${{ env.DBT_PRODUCTION_ARGS }}
       - uses: bacongobbler/azure-blob-storage-upload@main
         with:
           source_dir: dags
