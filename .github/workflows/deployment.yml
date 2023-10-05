@@ -17,5 +17,6 @@ jobs:
         with:
           source_dir: dags
           container_name: airflow
+          extra_args: '--destination-path dags'
           connection_string: ${{ secrets.BLOB_STORAGE_CONNECTION_STRING }}
           overwrite: 'true'
