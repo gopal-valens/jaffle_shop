@@ -3,15 +3,15 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime
 
 def helloWorld():
-    print('Hello World')
+    print('Hello World 2!')
 
-with DAG(dag_id="hello_world_dag",
+with DAG(dag_id="hello_world_dag_2",
          start_date=datetime(2023,10,5),
          schedule_interval="@daily",
          catchup=False) as dag:
     
     task1 = PythonOperator(
-        task_id="hello_world",
+        task_id="hello_world_2",
         python_callable=helloWorld)
 
 task1
