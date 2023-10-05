@@ -1,0 +1,21 @@
+name: deploy dbt project
+# This filter says only run this job when there is a push to the main branch
+# This works off the assumption that you've restricted this branch to only all PRs to push to the default branch
+# Update the name to match the name of your default branch
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bacongobbler/azure-blob-storage-upload@main
+        with:
+          source_dir: dags
+          container_name: airflow
+          connection_string: ${{ secrets.BLOB_STORAGE_CONNECTION_STRING }}
+          overwrite: 'true'
