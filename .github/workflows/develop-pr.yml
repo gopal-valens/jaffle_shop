@@ -7,7 +7,6 @@ on:
 env:
   PRODUCTION_BRANCH: main
   DBT_PRODUCTION_ARGS: --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
-  TEST_BRANCH_NAME: ${{ github.head_ref }}
   DBT_TEST_ARGS: --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target test
   DBT_TEST_SCHEMA: develop_pr_${{ github.event.number }}_${{ github.run_id }}_test
 
