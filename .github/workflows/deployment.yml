@@ -40,6 +40,7 @@ jobs:
         uses: Azure/azure-resource-login-action@v1.0.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+          allow-no-subscriptions: true
           resource-url: "https://database.windows.net"
       ##${{ steps.mgnt-login.outputs.token }}
       - name: print token
