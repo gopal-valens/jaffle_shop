@@ -48,7 +48,9 @@ jobs:
       - name: Set up Azure CLI
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_SERVICE_PRINCIPAL_CLIENT_ID }}- ${{ secrets.AZURE_SERVICE_PRINCIPAL_TENANT_ID }}- ${{ secrets.AZURE_SERVICE_PRINCIPAL_CLIENT_SECRET }}    
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          allow-no-subscriptions: true
+      #    creds: ${{ secrets.AZURE_SERVICE_PRINCIPAL_CLIENT_ID }}- ${{ secrets.AZURE_SERVICE_PRINCIPAL_TENANT_ID }}- ${{ secrets.AZURE_SERVICE_PRINCIPAL_CLIENT_SECRET }}    
       - name: Get Azure Service Principal Token
         id: get_token
         run: |
