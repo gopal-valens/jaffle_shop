@@ -40,9 +40,8 @@ jobs:
         uses: Azure/azure-resource-login-action@v1.0.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          allow-no-subscriptions: true
-          resource-url: "https://database.windows.net"
+          resource-url: "https://management.azure.com"
       ##${{ steps.mgnt-login.outputs.token }}
-      - name: print token
+      - name: print token value
         run: |
-          echo ${{ steps.mgnt-login.outputs.token }}
+          echo ${{ steps.azure-adf-login.outputs.token }}
