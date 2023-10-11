@@ -62,3 +62,29 @@ jobs:
         run: |
           echo $ACCESS_TOKEN
           # Use the $ACCESS_TOKEN in your subsequent Azure-related commands or scripts.
+      
+      - name: Call Sync REST API
+        run: |
+          # replace your actual value with placeholders https://management.azure.com/subscriptions/<SubscriptionID>/resourceGroups/<ResourceGroupName>/providers/Microsoft.DataFactory/factories/<AdfName>/airflow/sync?api-version=2018-06-01"
+          API_ENDPOINT="https://management.azure.com/subscriptions/0e769015-a299-41a6-9793-8ffebd94ca3b/resourceGroups/rg-dataops3.0-dbt/providers/Microsoft.DataFactory/factories/dbt-dataops/airflow/sync?api-version=2018-06-01"
+          
+          # Replace <your-request-data> with the actual payload data you want to send
+          REQUEST_DATA='{
+            "IntegrationRuntimeName": "gopal-airflow",
+            "LinkedServiceName": "airflowblobstoragelinkedservice",
+            "StorageFolderPath": "airflow",
+            "CopyFolderStructure": true,
+            "Overwrite": true,
+            "AddRequirementsFromFile": true
+          }'
+  
+          # Make the POST request using curl with the access token in the Authorization header
+          RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$REQUEST_DATA" $API_ENDPOINT)
+
+          # Check if the response code is 202
+          if [ $RESPONSE_CODE -eq 202 ]; then
+            echo "API call was successful (202 response)"
+          else
+            echo "API call failed with response code $RESPONSE_CODE"
+            exit 1  # Fail the workflow if the response code is not 202
+          fi
