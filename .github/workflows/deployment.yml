@@ -1,7 +1,4 @@
-name: deploy dbt project
-# This filter says only run this job when there is a push to the main branch
-# This works off the assumption that you've restricted this branch to only all PRs to push to the default branch
-# Update the name to match the name of your default branch
+name: production dbt deployment
 
 on:
   push:
@@ -12,7 +9,7 @@ env:
   DBT_PRODUCTION_ARGS: --project-dir dags/dbt/jaffle_shop --profiles-dir dags/dbt/jaffle_shop --target prod
 
 jobs:
-  upload:
+  production-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,13 +19,14 @@ jobs:
         uses: py-actions/py-dependency-install@v4
         with:
           path: "ci-requirements.txt"
-      - name: compile dbt manifest in production branch
+      - name: compile dbt project
         env:
           DBT_ACCESS_TOKEN: ${{ secrets.DBT_ACCESS_TOKEN }}
         run: |
           dbt deps ${{ env.DBT_PRODUCTION_ARGS }}
           dbt compile ${{ env.DBT_PRODUCTION_ARGS }}
-      - uses: bacongobbler/azure-blob-storage-upload@main
+      - name: deploy the compiled project to blob storage
+        uses: bacongobbler/azure-blob-storage-upload@main
         with:
           source_dir: dags
           container_name: airflow
@@ -40,13 +38,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           allow-no-subscriptions: true
-      - name: Get Azure Service Principal Token
-        id: get_token
+      - name: get Azure Service Principal Token
         run: |
           az account set --subscription 0e769015-a299-41a6-9793-8ffebd94ca3b
           ACCESS_TOKEN=$(az account get-access-token --resource=https://management.azure.com --query accessToken -o tsv)
           echo "ACCESS_TOKEN=$ACCESS_TOKEN" >> $GITHUB_ENV
-      - name: Call Sync REST API
+      - name: call Bolb Storage Sync REST API
         run: |
           API_ENDPOINT="https://management.azure.com/subscriptions/0e769015-a299-41a6-9793-8ffebd94ca3b/resourceGroups/rg-dataops3.0-dbt/providers/Microsoft.DataFactory/factories/dbt-dataops/airflow/sync?api-version=2018-06-01"
 
